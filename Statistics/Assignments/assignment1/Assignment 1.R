@@ -31,7 +31,7 @@ typeof(marks_vector)
 # 6.You have three students in your class (choose any name you want). You must create a matrix using their score in the above mentioned subjects 
 #(question 4) Student 1 (95, 91, and 88), Student 2(96, 94, and 97), Student 3(88, 98, and 85). Create a matrix and label column and row names.
 marks_of_all <- c(95, 91, 88,96, 94, 97, 88, 98, 85)
-students_vector <- matrix(marks_of_all, nrow = 3, byrow =TRUE, dimnames = list(c("Sovi", "Tokyo", "Siergo"), c("Statistics", "Linear Algebra", "Calculus")))
+students_vector <- matrix(marks_of_all, nrow = 3, byrow =TRUE, dimnames = list(c("Sovi", "Tokyo", "Rio"), c("Statistics", "Linear Algebra", "Calculus")))
 students_vector
 
 
