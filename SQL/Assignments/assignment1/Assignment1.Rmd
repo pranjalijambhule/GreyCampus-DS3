@@ -1,0 +1,126 @@
+---
+title: "Assignment 1"
+author: "Pranjali Jambhule"
+date: "05/05/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+
+```{r, echo = FALSE}
+
+library(DBI)
+setwd("C:/sovi/Data Science/SQL/week5/assignment")
+con <- dbConnect(RSQLite::SQLite(), dbname = ":memory:")
+dbWriteTable(con, "actor", read.csv("actor.csv"))
+dbWriteTable(con, "customer", read.csv("customer.csv"))
+dbWriteTable(con, "payment", read.csv("payment.csv"))
+dbWriteTable(con, "film", read.csv("film.csv"))
+
+```
+
+### 1. Do we have actors in the actor table that share the full name and if yes display those shared names.
+
+
+```{sql, connection=con}
+SELECT first_name, last_name, COUNT (first_name) FROM actor
+GROUP BY first_name, last_name
+HAVING COUNT(first_name) > 1;
+
+
+```
+
+### 2. Return the customer IDs of customers who have spent at least $110 with the staff member who has an ID of 2.
+
+
+```{sql, connection=con}
+SELECT customer_id, staff_id, SUM(amount) FROM payment
+WHERE staff_id = 2
+GROUP BY customer_id, staff_id
+HAVING SUM(amount) >= 110;
+
+
+```
+### 3. How many films begin with the letter J?
+
+
+```{sql, connection=con}
+SELECT COUNT(title) FROM film
+WHERE title LIKE 'J%';
+
+
+```
+### 4. What customer has the highest customer ID number whose name starts with an 'E' and has an ID lower than 500?
+
+
+```{sql, connection=con}
+SELECT first_name, last_name, address_id, customer_id FROM customer
+WHERE first_name LIKE 'E%' AND address_id < 500
+ORDER BY customer_id DESC
+LIMIT 1;
+
+
+```
+### 5. How many films have the word Truman somewhere in the title?
+
+
+```{sql, connection=con}
+SELECT COUNT(*) FROM film
+WHERE title LIKE '%Truman%';
+
+
+```
+### 6. Display the total amount payed by all customers in the payment table.
+
+
+```{sql, connection=con}
+-- As there are no repeated payment_id we can go with direct sum
+SELECT SUM (amount) FROM payment;
+
+
+```
+### 7. Display the total amount payed by each customer in the payment table.
+
+
+```{sql, connection=con}
+SELECT customer_id, SUM(amount) FROM payment
+GROUP BY customer_id
+LIMIT 10;
+
+
+```
+### 8. What is the highest total_payment done.
+
+
+```{sql, connection=con}
+SELECT customer_id, SUM(amount) FROM payment
+GROUP BY customer_id
+ORDER BY SUM(amount) DESC
+LIMIT 1;
+
+```
+### 9. Which customers have not rented any movies so far.
+
+
+```{sql, connection=con}
+SELECT customer_id, amount FROM payment
+WHERE amount = 0;
+
+
+```
+### 10. How many payment transactions were greater than $5.00?
+ 
+
+```{sql, connection=con}
+SELECT payment_id, customer_id, amount FROM payment
+WHERE amount > 5
+ORDER BY amount DESC
+LIMIT 10;
+
+
+```
+
